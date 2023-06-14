@@ -5,7 +5,6 @@ import {images} from '../../constants'
 function Home() {
   return (
     <View>
-      <ImageBackground resizeMode='cover' style={{flex: 1, width: null, height: 300}} source={images.background} />
     </View>
   )
 }

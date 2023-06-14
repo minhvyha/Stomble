@@ -4,7 +4,7 @@ import {images} from '../../constants'
 function EditHero() {
   return (
     <View>
-      <ImageBackground resizeMode='contain' style={{height: "20%"}} source={images.background} />
+      <Image resizeMode='cover' style={{height: "100%", width: "100%"}} source={images.background} />
     </View>
   )
 }

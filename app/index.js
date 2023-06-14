@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useRouter, Redirect } from 'expo-router';
 import ScreenHeaderBtn from '../components/header/ScreenHeaderBtn';
 import { icons } from '../constants';
 
 function Home() {
-  const router = useRouter();
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
+  return <Redirect href="/home" />;
+}
+
+
+{/* <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerShadowVisible: false,
@@ -20,8 +22,5 @@ function Home() {
           // }
         }}
       />
-    </SafeAreaView>
-  );
-}
-
+    </SafeAreaView> */}
 export default Home;
