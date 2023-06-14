@@ -5,10 +5,15 @@ import ScreenHeaderBtn from '../components/header/ScreenHeaderBtn';
 import { icons,  } from '../constants';
 export default function Home() {
 
-  let [contactList, setContactList] = useState('')
+  let [contactList, setContactList] = useState([])
 
   useEffect(() =>{
-    
+    async function fetchData(){
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+      const jsonResponse = await response.json()
+      setContactList(jsonResponse)
+    }
+    fetchData()
   }, [])
 
   const DATA = [
@@ -45,7 +50,7 @@ export default function Home() {
     />
     <View style={{width: 900, height: 300}}>
     <FlatList
-          data={DATA}
+          data={contactList}
           renderItem={({ item }) => (
             <TouchableOpacity
 
