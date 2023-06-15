@@ -10,6 +10,8 @@ import {
 import { Stack, useRouter, Redirect } from 'expo-router';
 import ScreenHeaderBtn from '../components/header/ScreenHeaderBtn';
 import { icons } from '../constants';
+
+
 export default function Home() {
   let [contactList, setContactList] = useState([]);
   const getArticlesFromApi = async () => {

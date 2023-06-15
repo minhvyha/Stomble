@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -6,30 +6,44 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import { Stack, useRouter, Redirect } from 'expo-router';
+import ScreenHeaderBtn from '../components/header/ScreenHeaderBtn';
+import { icons } from '../constants';
 
-
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
-
-const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor}]}>
-    <Text style={[styles.title, {color: textColor}]}>{item.title}</Text>
+const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[styles.item, { backgroundColor }]}
+  >
+    <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
   </TouchableOpacity>
 );
+
+class MyListItem extends React.PureComponent {
+  render() {
+    return (
+      <View
+        style={{
+          paddingVertical: 10,
+        }}
+      >
+        <TouchableOpacity onPress={() => null}>
+          <Text
+            style={{
+              color: '#000',
+              height: 40,
+              justifyContent: 'center',
+            }}
+          >
+            {this.props.id}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
 
 const App = () => {
   const [selectedId, setSelectedId] = useState();
@@ -42,7 +56,9 @@ const App = () => {
   };
   getArticlesFromApi();
 
-  const renderItem = ({item}) => {
+  let _renderItem = ({ item }) => <MyListItem id={item.id} />;
+
+  const renderItem = ({ item }) => {
     const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
     const color = item.id === selectedId ? 'white' : 'black';
 
@@ -58,10 +74,23 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerShadowVisible: false,
+          headerTitle: '',
+          headerLeft: () => (
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Contact</Text>
+          ),
+          headerRight: () => (
+            <ScreenHeaderBtn iconUrl={icons.chevronDark} dimension="50%" />
+          ),
+        }}
+      />
       <FlatList
         data={contactList}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
+        initialNumToRender={5}
+        renderItem={_renderItem}
+        keyExtractor={(item) => item.id}
         extraData={selectedId}
       />
     </SafeAreaView>
