@@ -1,5 +1,5 @@
 import { Stack, useRouter, useSearchParams } from 'expo-router';
-import { useCallback, useState, useEffect } from 'react';
+import {  useState, useEffect } from 'react';
 import {
   View,
   Text,
