@@ -4,13 +4,10 @@ import {
   View,
   Text,
   SafeAreaView,
-  ScrollView,
   ActivityIndicator,
-  RefreshControl,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import Footer from '../../components/body/Footer';
 import { AntDesign } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { images } from '../../constants';
@@ -18,6 +15,10 @@ import { images } from '../../constants';
 const ContactDetail = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [searchLoader, setSearchLoader] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+
   const params = useSearchParams();
   const router = useRouter();
 
@@ -28,11 +29,33 @@ const ContactDetail = () => {
     );
     let json = await response.json();
     setSearchResult(json);
+    setFirstName(json.firstName);
+    setLastName(json.lastName);
+    setPhone(json.phone);
     setSearchLoader(false);
   };
   useEffect(() => {
     getContactDetail();
   }, []);
+
+  async function handleSave() {
+    setSearchLoader(true);
+
+    var baseUrl = `http://13.211.126.106:3012/u9clgWg4OzQBwLNp/editContact`;
+    let buyResult = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        key: searchResult.key,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+      }),
+    });
+    setSearchLoader(false);
+  }
 
   return (
     <SafeAreaView>
@@ -71,11 +94,87 @@ const ContactDetail = () => {
                 height: '100%',
                 backgroundColor: 'white',
                 width: '100%',
-                marginTop: -25,
-                zIndex:-1
+                marginTop: -60,
+                paddingTop: 75,
+                zIndex: -1,
+                borderRadius: 30,
+                gap: 13,
               }}
             >
-              <Text>{searchResult.key}</Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginHorizontal: 20,
+                }}
+              >
+                <TextInput
+                  style={{
+                    height: 40,
+                    borderWidth: 1.5,
+                    width: '48%',
+
+                    paddingHorizontal: 10,
+                    color: 'black',
+                  }}
+                  placeholderTextColor="black"
+                  value={firstName}
+                  underlineColorAndroid="transparent"
+                  placeholder="First Name"
+                  onChangeText={(text) => {
+                    setFirstName(text);
+                  }}
+                />
+                <TextInput
+                  style={{
+                    height: 40,
+                    width: '48%',
+                    borderWidth: 1.5,
+                    paddingHorizontal: 10,
+                    color: 'black',
+                  }}
+                  placeholderTextColor="black"
+                  value={lastName}
+                  underlineColorAndroid="transparent"
+                  placeholder="Last Name"
+                  onChangeText={(text) => {
+                    setLastName(text);
+                  }}
+                />
+              </View>
+              <TextInput
+                style={{
+                  height: 40,
+                  borderWidth: 1.5,
+                  marginLeft: 20,
+                  marginRight: 20,
+                  paddingHorizontal: 10,
+                  color: 'black',
+                }}
+                placeholderTextColor="black"
+                value={phone}
+                underlineColorAndroid="transparent"
+                placeholder="Last Name"
+                onChangeText={(text) => {
+                  setPhone(text);
+                }}
+              />
+              <View style={{ alignItems: 'flex-end', marginRight: 20 }}>
+                <TouchableOpacity
+                  onPress={handleSave}
+                  style={{
+                    backgroundColor: '#4a69bb',
+                    width: 90,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingVertical: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: 18 }}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Image>

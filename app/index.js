@@ -8,9 +8,9 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import { Stack, useRouter,  } from 'expo-router';
-import Footer from '../components/body/Footer';
-import { AntDesign } from '@expo/vector-icons';
+import { Stack, useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const App = () => {
   const router = useRouter();
@@ -18,46 +18,46 @@ const App = () => {
   let [contactList, setContactList] = useState([]);
   let [filterList, setFilterList] = useState([]);
   let [search, setSearch] = useState('');
-
-
+  const isFocused = useIsFocused();
 
   const getContactList = async () => {
     let response = await fetch('http://13.211.126.106:3012/u9clgWg4OzQBwLNp');
     let json = await response.json();
     setContactList(json);
-    setFilterList(json)
+    setFilterList(json);
   };
   useEffect(() => {
     getContactList();
-  }, []);
+  }, [isFocused]);
 
   let _renderItem = ({ item }) => (
     <MyListItem id={item.key} detail={item} router={router} />
   );
 
   const ItemSeperator = () => {
-    return (
-      <View
-        style={{ height: 1, backgroundColor: '#c8c8c8' }}
-      />
-    );
+    return <View style={{ height: 1, backgroundColor: '#c8c8c8' }} />;
   };
 
-const searchFilter = (text) =>{
-  if (text){
-    const newData = contactList.filter(item =>{
-      const name = (item.firstName && item.lastName) ? (item.firstName + ' ' +item.lastName).toLowerCase() : ''
-      const phone = item.phone ? item.phone.toLowerCase(): ''
-      return name.includes(text.toLowerCase().trim()) || phone.includes(text.toLowerCase().trim())
-    })
-    setFilterList(newData)
-    setSearch(text)
-  }
-  else{
-    setFilterList(contactList)
-    setSearch(text)
-  }
-}
+  const searchFilter = (text) => {
+    if (text) {
+      const newData = contactList.filter((item) => {
+        const name =
+          item.firstName && item.lastName
+            ? (item.firstName + ' ' + item.lastName).toLowerCase()
+            : '';
+        const phone = item.phone ? item.phone.toLowerCase() : '';
+        return (
+          name.includes(text.toLowerCase().trim()) ||
+          phone.includes(text.toLowerCase().trim())
+        );
+      });
+      setFilterList(newData);
+      setSearch(text);
+    } else {
+      setFilterList(contactList);
+      setSearch(text);
+    }
+  };
 
   return (
     <SafeAreaView style={{ height: '100%' }}>
@@ -72,8 +72,8 @@ const searchFilter = (text) =>{
             </Text>
           ),
           headerRight: () => (
-            <TouchableOpacity>
-              <AntDesign name="left" size={24} color="black" />
+            <TouchableOpacity onPress={() => router.push('add')}>
+              <Ionicons name="add" size={32} color="black" />
             </TouchableOpacity>
           ),
         }}
@@ -89,7 +89,7 @@ const searchFilter = (text) =>{
             paddingHorizontal: 10,
             color: 'black',
           }}
-          placeholderTextColor='black'
+          placeholderTextColor="black"
           value={search}
           underlineColorAndroid="transparent"
           placeholder="Search"
@@ -103,10 +103,9 @@ const searchFilter = (text) =>{
           keyExtractor={(item) => item.key}
           // extraData={selectedId}
           ItemSeparatorComponent={ItemSeperator}
-          style={{height:'100%'}}
+          style={{ height: '100%' }}
         />
       </View>
-      <Footer />
     </SafeAreaView>
   );
 };
