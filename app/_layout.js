@@ -13,7 +13,10 @@ const Layout = () => {
   }
 
   return (
-    <Stack />
+    <Stack screenOptions={{
+
+
+    }} />
   )
 };
 

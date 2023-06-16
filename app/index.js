@@ -63,9 +63,7 @@ const searchFilter = (text) =>{
     <SafeAreaView style={{ height: '100%' }}>
       <Stack.Screen
         options={{
-          headerShadowVisible: true,
           headerTitle: '',
-          height: 1000,
           headerLeft: () => (
             <Text
               style={{ fontSize: 20, fontWeight: 'bold', paddingVertical: 10 }}

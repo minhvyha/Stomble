@@ -7,15 +7,21 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
   TextInput,
 } from "react-native";
-import FastImage from 'react-native-fast-image'
+import { AntDesign } from '@expo/vector-icons';
+
+
+import { Image } from 'expo-image';
 
 import {images} from '../../constants'
-function EditHero() {
+function Edit(params) {
   return (
     <View>
-      <FastImage style={{height: "100%", width: "100%"}} source={images.background} />
+      <Image style={{height: "100%", width: "100%"}} source={images.background} >
+        <Text>{params.id}</Text>
+         </Image>
     </View>
   )
 }
@@ -23,11 +29,23 @@ function EditHero() {
 const ContactDetail = () => {
   const params = useSearchParams()
   const router = useRouter()
-
+const [searchResult, setSearchResult] = useState([]);
+    const [searchLoader, setSearchLoader] = useState(false);
   return (
     <SafeAreaView>
-      <EditHero />
-      <Text>adsf</Text>
+      <Stack.Screen
+        options={{
+          headerShadowVisible: true,
+          headerTitle: '',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()} >
+              <AntDesign name="left" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+        }}
+        
+      />
+      {/* <EditHero params={params} /> */}
     </SafeAreaView>
   )
 }
