@@ -11,6 +11,7 @@ import {
 import { Stack, useRouter } from 'expo-router';
 import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 const App = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const App = () => {
   }, [isFocused]);
 
   let _renderItem = ({ item }) => (
-    <MyListItem id={item.key} detail={item} router={router} />
+    <MyListItem id={item.key} detail={item} router={router} handleDelete={handleDelete} />
   );
 
   const ItemSeperator = () => {
@@ -58,6 +59,20 @@ const App = () => {
       setSearch(text);
     }
   };
+
+  async function handleDelete(key){
+    var baseUrl = `http://13.211.126.106:3012/u9clgWg4OzQBwLNp/deleteContact`;
+    await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          key: key
+      }),
+    });
+    getContactList()
+  }
 
   return (
     <SafeAreaView style={{ height: '100%' }}>
@@ -116,6 +131,11 @@ class MyListItem extends React.PureComponent {
       <View
         style={{
           paddingVertical: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingLeft: 20,
+          paddingRight: 20
         }}
       >
         <TouchableOpacity
@@ -128,9 +148,10 @@ class MyListItem extends React.PureComponent {
             gap: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            paddingLeft: 20,
+            flex: 1
           }}
         >
+          
           <Image
             style={{
               width: 50,
@@ -138,7 +159,7 @@ class MyListItem extends React.PureComponent {
               borderRadius: 25,
             }}
             source={{
-              uri: `https://api.dicebear.com/6.x/micah/png?seed=${this.props.detail.firstName} ${this.props.detail.lastname}&facialHair[]&hair=dannyPhantom,full,pixie,turban,fonze&hairColor=000000,77311d,ac6651,f4d150,fc909f&mouth=laughing,nervous,pucker,smile,smirk,surprised&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
+              uri: `https://api.dicebear.com/6.x/micah/png?seed=${this.props.detail.firstName}${this.props.detail.lastName}&facialHair[]&hair=dannyPhantom,full,pixie,turban,fonze&hairColor=000000,77311d,ac6651,f4d150,fc909f&mouth=laughing,nervous,pucker,smile,smirk,surprised&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
             }}
           />
           <View style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -161,6 +182,9 @@ class MyListItem extends React.PureComponent {
               {this.props.detail.phone}
             </Text>
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.handleDelete(this.props.id)}>
+        <Feather name="x" size={24} color="black" />
         </TouchableOpacity>
       </View>
     );

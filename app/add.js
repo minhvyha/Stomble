@@ -8,26 +8,40 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { images } from '../constants';
+
 
 const add = () => {
   const [searchLoader, setSearchLoader] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [error, setError] = useState('')
   const [phone, setPhone] = useState('');
 
   const router = useRouter();
 
-  async function handleSave() {
-    setSearchLoader(true);
+  function checkError(){
+    if(firstName === '' || lastName === '' || phone === ''){
+      setError('* Please fill out all of the box.')
+      return true
+    }
+  }
 
-    var baseUrl = `http://13.211.126.106:3012/u9clgWg4OzQBwLNp/editContact`;
-    let buyResult = await fetch(baseUrl, {
+  async function handleSave() {
+    setError('')
+    if(checkError()){
+      return
+    }
+    setSearchLoader(true);
+    var baseUrl = `http://13.211.126.106:3012/addContact/u9clgWg4OzQBwLNp`;
+    await fetch(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        key: searchResult.key,
         firstName: firstName,
         lastName: lastName,
         phone: phone,
@@ -64,7 +78,7 @@ const add = () => {
                 borderRadius: 60,
               }}
               source={{
-                uri: `https://api.dicebear.com/6.x/micah/png?seed=${searchResult.firstName} ${searchResult.lastname}&facialHair[]&hair=dannyPhantom,full,pixie,turban,fonze&hairColor=000000,77311d,ac6651,f4d150,fc909f&mouth=laughing,nervous,pucker,smile,smirk,surprised&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
+                uri: `https://api.dicebear.com/6.x/micah/png?seed=${firstName}${lastName}&facialHair[]&hair=dannyPhantom,full,pixie,turban,fonze&hairColor=000000,77311d,ac6651,f4d150,fc909f&mouth=laughing,nervous,pucker,smile,smirk,surprised&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
               }}
             />
             {searchLoader && <ActivityIndicator size="large" />}
@@ -80,6 +94,7 @@ const add = () => {
                 gap: 13,
               }}
             >
+              <Text style={{color: 'red', marginLeft: 20}}>{error}</Text>
               <View
                 style={{
                   display: 'flex',
@@ -134,7 +149,7 @@ const add = () => {
                 placeholderTextColor="black"
                 value={phone}
                 underlineColorAndroid="transparent"
-                placeholder="Last Name"
+                placeholder="Phone Number"
                 onChangeText={(text) => {
                   setPhone(text);
                 }}
@@ -158,7 +173,6 @@ const add = () => {
           </View>
         </Image>
       </View>
-      <Footer />
     </SafeAreaView>
   )
 }
