@@ -21,14 +21,14 @@ const App = () => {
 
 
 
-  const getArticlesFromApi = async () => {
+  const getContactList = async () => {
     let response = await fetch('http://13.211.126.106:3012/u9clgWg4OzQBwLNp');
     let json = await response.json();
     setContactList(json);
     setFilterList(json)
   };
   useEffect(() => {
-    getArticlesFromApi();
+    getContactList();
   }, []);
 
   let _renderItem = ({ item }) => (
