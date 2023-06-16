@@ -15,6 +15,7 @@ import { icons } from '../constants';
 import Footer from '../components/body/Footer';
 import { AntDesign } from '@expo/vector-icons';
 
+
 class MyListItem extends React.PureComponent {
   render() {
     return (
@@ -23,7 +24,7 @@ class MyListItem extends React.PureComponent {
           paddingVertical: 10,
         }}
       >
-        <TouchableOpacity style={{display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center', paddingLeft: 20}} onPress={() => null}>
+        <TouchableOpacity onPress={() =>{router.push(`contact/${item.key}`)}} style={{display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
         <Image
         style={ {
           width: 50,
@@ -61,6 +62,7 @@ class MyListItem extends React.PureComponent {
 }
 
 const App = () => {
+  const router = useRouter()
   let [contactList, setContactList] = useState([]);
   const getArticlesFromApi = async () => {
     let response = await fetch('http://13.211.126.106:3012/u9clgWg4OzQBwLNp');
